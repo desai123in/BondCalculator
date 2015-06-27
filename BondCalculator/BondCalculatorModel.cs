@@ -16,20 +16,11 @@ namespace BondCalculator
         private int frequency = 1;
         private decimal faceValue = 1000m;
         private decimal yield = 15m;
-        private decimal presentValue;
+        private decimal presentValue = 550m;
 
         #endregion
         #region Public Properties
-        //if (this._CustomerId != value)
-        //    {
-        //        if (value == "abc") 
-        //            base.AddError("CustomerId", "abc not allowed");
-        //        else
-        //            base.RemoveError("CustomerId");
- 
-        //        this._CustomerId = value;
-        //        base.NotifyPropertyChanged("CustomerId", new Action<bool>((valid) => { AppMessages.CustomerIsValid.Send(valid); }));
-        //    }
+      
         public decimal CouponRate
         {
             get { return couponRate; }
