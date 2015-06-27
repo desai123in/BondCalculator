@@ -36,7 +36,7 @@ namespace BondCalculationEngine
 
         #region Private Methods
 
-        private decimal Powerx(decimal num, decimal power)
+        private decimal PowerDecimal(decimal num, decimal power)
         {
             decimal res = 1m;
             for (int i = 1; i <= power; i++)
@@ -59,11 +59,11 @@ namespace BondCalculationEngine
         private decimal PRICE(int yearsToMaturity, decimal rate, decimal yld, decimal redemption,int frequency)
         {
 
-            decimal presentValueOfRedemption = redemption / Powerx(1 + yld / frequency, yearsToMaturity);
+            decimal presentValueOfRedemption = redemption / PowerDecimal(1 + yld / frequency, yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
-                presentValueOfCouponPayments += (redemption * rate / frequency) / Powerx(1 + yld / frequency, k);
+                presentValueOfCouponPayments += (redemption * rate / frequency) / PowerDecimal(1 + yld / frequency, k);
             }
 
             return presentValueOfRedemption + presentValueOfCouponPayments;
@@ -74,11 +74,11 @@ namespace BondCalculationEngine
         {
 
 
-            decimal presentValueOfRedemption = redemption * (1 - yearsToMaturity) * Powerx(1 + yld / frequency, -yearsToMaturity);
+            decimal presentValueOfRedemption = redemption * (1 - yearsToMaturity) * PowerDecimal(1 + yld / frequency, -yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
-                presentValueOfCouponPayments += (redemption * (1 - k) * rate * Powerx(1 + yld / frequency, -k)) / Powerx(frequency, 2);
+                presentValueOfCouponPayments += (redemption * (1 - k) * rate * PowerDecimal(1 + yld / frequency, -k)) / PowerDecimal(frequency, 2);
             }
 
             return presentValueOfRedemption + presentValueOfCouponPayments;

@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="BondCalculatorModel.cs" />
     <Compile Include="BondCalculatorViewModel.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -115,6 +116,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BondCalculationEngine\BondCalculationEngine.csproj">
+      <Project>{dadc9b67-dc7d-404f-9d64-863a2dbf2286}</Project>
+      <Name>BondCalculationEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BondCalculator.Common\BondCalculator.Common.csproj">
+      <Project>{b8ffe1d2-1b9e-416f-8a7c-0457509067c7}</Project>
+      <Name>BondCalculator.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
