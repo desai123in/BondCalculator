@@ -8,16 +8,16 @@ namespace BondCalculator
 {
     public class BondCalculatorViewModel
     {
-        private BondCalculatorModel calculator = new BondCalculatorModel();
+        private BondCalculatorModel calculatorModel = new BondCalculatorModel();
 
-        public BondCalculatorModel Calculator
+        public BondCalculatorModel CalculatorModel
         {
-            get { return calculator; }            
+            get { return calculatorModel; }            
         }
 
         public bool IsValid
         {
-            get { return this.calculator.IsValid; }
+            get { return this.calculatorModel.IsValid; }
         }
 
 

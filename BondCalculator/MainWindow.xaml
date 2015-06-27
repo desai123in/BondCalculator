@@ -26,14 +26,14 @@
                    >
             <TextBlock.Style>
                     <Style>
-                    <Setter Property="TextBlock.Text" Value="{Binding Calculator.Yield}" />
+                    <Setter Property="TextBlock.Text" Value="{Binding CalculatorModel.Yield}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=rdoYield, Path=IsChecked}" Value="True">
-                            <Setter Property="TextBlock.Text" Value="{Binding Calculator.PresentValue}" />
+                            <Setter Property="TextBlock.Text" Value="{Binding CalculatorModel.PresentValue}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
+            </TextBlock.Style>
         </TextBlock>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <RadioButton Name="rdoYield" GroupName="YieldPV" IsChecked="True">Yield</RadioButton>
@@ -43,10 +43,10 @@
             <TextBox x:Name="txtYieldPV" Height="27" TextWrapping="Wrap" Margin="127,0,251,0">
                 <TextBox.Style>
                     <Style>
-                        <Setter Property="TextBox.Text" Value="{Binding Calculator.Yield}" />
+                        <Setter Property="TextBox.Text" Value="{Binding CalculatorModel.Yield}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=rdoYield, Path=IsChecked}" Value="False">
-                                <Setter Property="TextBox.Text" Value="{Binding Calculator.PresentValue}" />
+                                <Setter Property="TextBox.Text" Value="{Binding CalculatorModel.PresentValue}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -59,7 +59,7 @@
         <Label Content="Coupon Frequency" HorizontalAlignment="Left" Margin="53,10,0,0" Grid.Row="4" VerticalAlignment="Top"/>
         <Label Content="Face Value" HorizontalAlignment="Left" Margin="53,10,0,0" Grid.Row="5" VerticalAlignment="Top"/>
         <Button Name="btnCalculate" Content="Calculate" IsEnabled="{Binding Path=IsValid}" Grid.Column="1" HorizontalAlignment="Left" Margin="122,31,0,0" Grid.Row="6" VerticalAlignment="Top" Width="75"/>
-        <TextBox Name="txtCouponRate" Text="{Binding Path=Calculator.CouponRate,Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="191">
+        <TextBox Name="txtCouponRate" Text="{Binding Path=CalculatorModel.CouponRate,Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="191">
             <Validation.ErrorTemplate>
                 <ControlTemplate>
 
@@ -78,9 +78,9 @@
                 </ControlTemplate>
             </Validation.ErrorTemplate>
         </TextBox>
-        <TextBox Name="txtMaturity" Text="{Binding Path=Calculator.YearsToMaturity}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
-        <TextBox Name="txtFrequency" Text="{Binding Path=Calculator.Frequency}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
-        <TextBox Name="txtFaceValue" Text="{Binding Path=Calculator.FaceValue}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtMaturity" Text="{Binding Path=CalculatorModel.YearsToMaturity}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtFrequency" Text="{Binding Path=CalculatorModel.Frequency}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtFaceValue" Text="{Binding Path=CalculatorModel.FaceValue}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
 
     </Grid>
 </Window>
