@@ -28,8 +28,8 @@
             <RadioButton GroupName="YieldNPV">Present Value</RadioButton>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <Label Name="lblYieldPV" Content="Label"/>
-            <TextBox Name="txtYieldPV" Height="31" TextWrapping="Wrap" Text="TextBox"/>
+            <Label x:Name="lblYieldPV" Content="Label"/>
+            <TextBox x:Name="txtYieldPV" Height="27" TextWrapping="Wrap" Text="TextBox" Margin="127,0,251,0"/>
         </StackPanel>
         <Label Content="Coupon Rate" HorizontalAlignment="Left" Margin="53,30,0,0" Grid.Row="2" VerticalAlignment="Top"/>
         <Label Content="Maturity (Years)" HorizontalAlignment="Left" Margin="53,25,0,0" Grid.Row="3" VerticalAlignment="Top"/>
