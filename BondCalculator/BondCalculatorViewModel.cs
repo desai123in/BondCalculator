@@ -3,12 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BondCalculator
 {
-    public class BondCalculatorViewModel
+    public class BondCalculatorViewModel:INotifyPropertyChanged
     {
-        private BondCalculatorModel calculatorModel = new BondCalculatorModel();
+        #region Private Fields
+        private BondCalculatorModel calculatorModel;
+        #endregion
+
+        #region Constructors
+        public BondCalculatorViewModel()
+        {
+            calculatorModel = new BondCalculatorModel();
+            calculatorModel.NotifyVM = () => { NotifyPropertyChanged("IsValid"); };
+        }
+        #endregion
+
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
 
         public BondCalculatorModel CalculatorModel
         {
@@ -18,7 +34,21 @@ namespace BondCalculator
         public bool IsValid
         {
             get { return this.calculatorModel.IsValid; }
+            
         }
+
+        #region Private Methods
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+            {
+                // property changed
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+
+
 
 
     }

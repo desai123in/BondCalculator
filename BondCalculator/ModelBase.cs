@@ -12,6 +12,7 @@ namespace BondCalculator
 {
     #region Property changed
     public event PropertyChangedEventHandler PropertyChanged;
+    public Action NotifyVM;
  
     protected void NotifyPropertyChanged(string propertyName)
     {
@@ -68,6 +69,10 @@ namespace BondCalculator
         // Notify
         if (this.ErrorsChanged != null)
             this.ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
+        if(NotifyVM != null)
+        {
+            NotifyVM();
+        }
     }
     #endregion
 }
