@@ -15,6 +15,11 @@ namespace BondCalculator
             get { return calculator; }            
         }
 
+        public bool IsValid
+        {
+            get { return this.calculator.IsValid; }
+        }
+
 
     }
 }
