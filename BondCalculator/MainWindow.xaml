@@ -31,15 +31,15 @@
             <Label x:Name="lblYieldPV" Content="Label"/>
             <TextBox x:Name="txtYieldPV" Height="27" TextWrapping="Wrap" Text="TextBox" Margin="127,0,251,0"/>
         </StackPanel>
-        <Label Content="Coupon Rate" HorizontalAlignment="Left" Margin="53,30,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <Label Content="Coupon Rate"  HorizontalAlignment="Left" Margin="53,30,0,0" Grid.Row="2" VerticalAlignment="Top"/>
         <Label Content="Maturity (Years)" HorizontalAlignment="Left" Margin="53,25,0,0" Grid.Row="3" VerticalAlignment="Top"/>
         <Label Content="Coupon Frequency" HorizontalAlignment="Left" Margin="53,10,0,0" Grid.Row="4" VerticalAlignment="Top"/>
         <Label Content="Face Value" HorizontalAlignment="Left" Margin="53,10,0,0" Grid.Row="5" VerticalAlignment="Top"/>
         <Button Name="btnCalculate" Content="Calculate" Grid.Column="1" HorizontalAlignment="Left" Margin="122,31,0,0" Grid.Row="6" VerticalAlignment="Top" Width="75"/>
-        <TextBox Name="txtCouponRate" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="191"/>
-        <TextBox Name="txtMaturity" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="191"/>
-        <TextBox Name="txtFrequency" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="4" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="191"/>
-        <TextBox Name="txtFaceValue" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtCouponRate" Text="{Binding Path=Calculator.CouponRate}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtMaturity" Text="{Binding Path=Calculator.YearsToMaturity}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtFrequency" Text="{Binding Path=Calculator.Frequency}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
+        <TextBox Name="txtFaceValue" Text="{Binding Path=Calculator.FaceValue}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="122,30,0,0" Grid.Row="5" TextWrapping="Wrap" VerticalAlignment="Top" Width="191"/>
 
     </Grid>
 </Window>
