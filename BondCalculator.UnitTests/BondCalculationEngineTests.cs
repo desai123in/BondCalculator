@@ -9,11 +9,14 @@ namespace BondCalculator.UnitTests
     public class BondCalculationEngineTests
     {
         private IBondCalculationEngine target;
-              
+        private int yieldPrecision;
+        private int presentValuePrecision;
         [TestInitialize]
         public void Init()
         {
             target = Factory.GetBondCalculationEngine("Default");
+            yieldPrecision = BondCalculator.Common.AppConfig.Instance.YieldPrecision;
+            presentValuePrecision = BondCalculator.Common.AppConfig.Instance.PresentValuePrecision;
         }
 
         #region CalculateYield Tests
@@ -32,7 +35,7 @@ namespace BondCalculator.UnitTests
 
             decimal expected = 0.1000000000m;
             decimal actual = target.CalculateYield(couponRate, yearsToMaturity, frequency, faceValue, presentValue);
-            actual = CommonUtils.Truncate(actual, 9);
+            actual = CommonUtils.Truncate(actual, yieldPrecision);
 
             Assert.AreEqual<decimal>(expected, actual);
 
@@ -54,7 +57,7 @@ namespace BondCalculator.UnitTests
 
             decimal expected = 0.149997375m;
             decimal actual = target.CalculateYield(couponRate, yearsToMaturity, frequency, faceValue, presentValue);
-            actual = CommonUtils.Truncate(actual, 9);
+            actual = CommonUtils.Truncate(actual, yieldPrecision);
             
             Assert.AreEqual<decimal>(expected, actual);
 
@@ -76,7 +79,7 @@ namespace BondCalculator.UnitTests
 
             decimal expected = 0.075266056m;
             decimal actual = target.CalculateYield(couponRate, yearsToMaturity, frequency, faceValue, presentValue);
-            actual = CommonUtils.Truncate(actual, 9);
+            actual = CommonUtils.Truncate(actual, yieldPrecision);
 
             Assert.AreEqual<decimal>(expected, actual);
 
@@ -100,7 +103,7 @@ namespace BondCalculator.UnitTests
 
             decimal expected = 1000.0000000m;
             decimal actual = target.CalculatePresentValue(couponRate, yearsToMaturity, frequency, faceValue, yield);
-            actual = CommonUtils.Truncate(actual, 7);
+            actual = CommonUtils.Truncate(actual, presentValuePrecision);
 
             Assert.AreEqual<decimal>(expected, actual);
 
@@ -122,7 +125,7 @@ namespace BondCalculator.UnitTests
 
             decimal expected = 832.3922450m;
             decimal actual = target.CalculatePresentValue(couponRate, yearsToMaturity, frequency, faceValue, yield);
-            actual = CommonUtils.Truncate(actual, 7);
+            actual = CommonUtils.Truncate(actual, presentValuePrecision);
 
             Assert.AreEqual<decimal>(expected, actual);
 

@@ -99,8 +99,8 @@ namespace BondCalculator.Model
             set {
                     if (!yield.Equals(value))
                     {
-                        if (value.CompareTo(100.0m) > 0)
-                            base.AddError("Yield", "Allowed range: < 10000% ");
+                        if (value.CompareTo(1.0m) > 0)
+                            base.AddError("Yield", "Allowed range: < 100% ");
                         else
                             base.RemoveError("Yield");
                         yield = value;

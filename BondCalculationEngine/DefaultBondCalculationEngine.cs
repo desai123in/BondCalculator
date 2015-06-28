@@ -34,7 +34,6 @@ namespace BondCalculationEngine
         {
             try
             {
-               
                 return SolveYield(yearsToMaturity, couponRate, presentValue, faceValue, frequency);
             }
             catch (Exception e)
@@ -102,6 +101,8 @@ namespace BondCalculationEngine
                 x => Price(yearsToMaturity, rate, x, faceValue, frequency) - pr,
                 y => PriceDerivative(yearsToMaturity, rate, y, faceValue, frequency), numIterations);
         }
+
+       
 
         #endregion
 

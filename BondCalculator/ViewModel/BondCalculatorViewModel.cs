@@ -124,6 +124,7 @@ namespace BondCalculator.ViewModel
                         {
                             try
                             {
+                                string dd = "dd";
                                 if (t.Result < 1)
                                 {
                                     decimal res = t.Result;

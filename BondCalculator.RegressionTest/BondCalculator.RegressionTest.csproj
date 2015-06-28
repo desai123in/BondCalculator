@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{04DDE52E-C243-4BDC-A412-DB379DED1507}</ProjectGuid>
+    <ProjectGuid>{183FF2BD-8F2A-429B-AE68-468C0F40F32C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BondCalculator.UnitTests</RootNamespace>
-    <AssemblyName>BondCalculator.UnitTests</AssemblyName>
+    <RootNamespace>BondCalculator.RegressionTest</RootNamespace>
+    <AssemblyName>BondCalculator.RegressionTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -50,8 +53,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BondCalculationEngineTests.cs" />
+    <Compile Include="RegressionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="PVFromYield.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="YieldFromPV.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BondCalculationEngine\BondCalculationEngine.csproj">
@@ -62,11 +74,10 @@
       <Project>{b8ffe1d2-1b9e-416f-8a7c-0457509067c7}</Project>
       <Name>BondCalculator.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\BondCalculator\BondCalculator.csproj">
+      <Project>{30f62a21-3ab4-479d-be25-4d211e332126}</Project>
+      <Name>BondCalculator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
