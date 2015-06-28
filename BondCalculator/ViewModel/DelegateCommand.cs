@@ -6,7 +6,7 @@
     using System.Windows.Input;
     using System.Diagnostics;
 
-    namespace BondCalculator
+namespace BondCalculator.ViewModel
     {
         public class DelegateCommand : ICommand
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace BondCalculator
+namespace BondCalculator.ViewModel
 {
     public class PercentageConverter : IValueConverter
     {

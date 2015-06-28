@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using BondCalculationEngine;
 using BondCalculator.Common;
+using BondCalculator.Model;
 using System.Threading;
 
-namespace BondCalculator
+namespace BondCalculator.ViewModel
 {
     public class BondCalculatorViewModel:INotifyPropertyChanged
     {

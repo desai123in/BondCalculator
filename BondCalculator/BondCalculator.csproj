@@ -73,7 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -81,17 +81,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BondCalculatorModel.cs" />
-    <Compile Include="BondCalculatorViewModel.cs" />
-    <Compile Include="DelegateCommand.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Model\BondCalculatorModel.cs" />
+    <Compile Include="ViewModel\BondCalculatorViewModel.cs" />
+    <Compile Include="ViewModel\DelegateCommand.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelBase.cs" />
-    <Compile Include="PercentageConverter.cs" />
+    <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="ViewModel\PercentageConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
