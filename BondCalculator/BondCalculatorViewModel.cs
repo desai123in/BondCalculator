@@ -27,11 +27,10 @@ namespace BondCalculator
             calculatorModel = new BondCalculatorModel();
             calculationEngine = Factory.GetBondCalculationEngine("Default");
 
-            calculatorModel.NotifyVM = () => { NotifyPropertyChanged("IsValid"); };
-            //CalculateCommand = new DelegateCommand(param => { _calc.Number(Convert.ToInt32(param)); UpdateDisplay(); },
-            //                                param => _calc.CanDoNumber());
+            calculatorModel.NotifyVM = () => { NotifyPropertyChanged("ReadyForCalculation"); };
 
-            CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => IsValid && !calculationRunning);
+
+            CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => ((ReadyForCalculation) && (!calculationRunning)));
             YieldToggleCommand = new DelegateCommand(param => { yieldGiven = (bool)param; StatusText = ""; }, (param) => true);
             PVToggleCommand = new DelegateCommand(param => { yieldGiven = !(bool)param; StatusText = ""; }, (param) => true);
 
@@ -49,9 +48,9 @@ namespace BondCalculator
             get { return calculatorModel; }            
         }
 
-        public bool IsValid
+        public bool ReadyForCalculation
         {
-            get { return this.calculatorModel.IsValid; }
+            get { return this.calculatorModel.IsValid && !calculationRunning; }
             
         }
 
@@ -74,61 +73,68 @@ namespace BondCalculator
 
         private void PriceBond()
         {
-
-            decimal result;
-                try
+            try
+            {
+                StatusText = "Started Calculation...";
+                calculationRunning = true;
+                NotifyPropertyChanged("ReadyForCalculation");
+                if (!yieldGiven)
                 {                   
-                    if (!yieldGiven)
-                    {
-                        using (Task<decimal> task = new Task<decimal>(() => calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue)))
+                    Task<decimal>.Factory.StartNew(() => calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue))
+                        .ContinueWith(t => 
                         {
-
-                            StatusText = "Started Calculation...";
-                            calculationRunning = true;
-
-                            task.Start();
-                            task.Wait();// wait for the task to finish, without blocking the main thread
-
-                            if (!task.IsFaulted)
+                            try
                             {
-                                calculatorModel.Yield = task.Result;//the task has finished its background work, and we can take the result
-                                StatusText = "Yield =";//Signal the completion of the task
+                                if (!t.IsFaulted)
+                                {
+                                    calculatorModel.Yield = t.Result;
+                                    StatusText = "Yield = ";
+                                }
                             }
-                        }
-                    }
-                    else
-                    {
-                        using (Task<decimal> task = new Task<decimal>(() => calculationEngine.CalculatePresentValue(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.Yield)))
-                        {
-
-                            StatusText = "Started Calculation...";
-                            calculationRunning = true;
-
-                            task.Start();
-                            task.Wait();// wait for the task to finish, without blocking the main thread
-
-                            if (!task.IsFaulted)
+                            catch (AggregateException ae)
                             {
-                                calculatorModel.PresentValue = task.Result;//the task has finished its background work, and we can take the result
-                                StatusText = "Present Value = ";//Signal the completion of the task
+                                //log excepion
+                                StatusText = "Error in calculation.";
                             }
-                        }
-                    }
+                            finally
+                            {
+                                calculationRunning = false;
+                                NotifyPropertyChanged("ReadyForCalculation");
+                            }
+                        }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
-                catch(AggregateException ae)
-                {
-                    //log excepion
-                    StatusText = "Error in calculation.";
+                else
+                {                    
+                    Task<decimal>.Factory.StartNew(() => calculationEngine.CalculatePresentValue(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.Yield))
+                            .ContinueWith(t => 
+                            {
+                                try
+                                {
+                                    if (!t.IsFaulted)
+                                    {
+                                        calculatorModel.PresentValue = t.Result;
+                                        StatusText = "Present Value = ";
+                                    }
+                                }
+                                catch (AggregateException ae)
+                                {
+                                    //log excepion
+                                    StatusText = "Error in calculation.";
+                                }
+                                finally
+                                {
+                                    calculationRunning = false;
+                                    NotifyPropertyChanged("ReadyForCalculation");
+                                }
+
+                            }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
-                catch(Exception e)
-                {
-                    //log excepion
-                    StatusText = "Error in calculation.";
-                }
-                finally
-                {
-                    calculationRunning = false;
-                }
+            }           
+            catch (Exception e)
+            {
+                //log excepion
+                StatusText = "Error in calculation.";
+            }            
             
         }
 

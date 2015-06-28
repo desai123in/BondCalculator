@@ -25,5 +25,6 @@ namespace BondCalculator
             InitializeComponent();
             this.DataContext = new BondCalculatorViewModel();
         }
+       
     }
 }

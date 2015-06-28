@@ -5,6 +5,20 @@
         Title="MainWindow" Height="620" Width="800">
     <Window.Resources>
         <local:PercentageConverter x:Key="PercentConverter" />
+        <ControlTemplate x:Key="ErrorTemplate">
+            <!-- Align text box and error list horizontally -->
+            <StackPanel Orientation="Horizontal">
+
+                <AdornedElementPlaceholder x:Name="textBox"/>
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ControlTemplate>
     </Window.Resources>
     <Grid Margin="0,10,0,0">
         <Grid.RowDefinitions>
@@ -31,7 +45,7 @@
                     <ColumnDefinition Width="199*"/>
                     <ColumnDefinition Width="493*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="{Binding Path=StatusText, Mode=TwoWay}" Grid.Row="0" Background="AliceBlue" Grid.Column="0" Height="41" VerticalAlignment="Bottom" RenderTransformOrigin="0.484,-0.355" Margin="95,0,468,2" Grid.ColumnSpan="2" VerticalContentAlignment="Bottom" />
+                <Label Content="{Binding Path=StatusText, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="41" VerticalAlignment="Bottom" RenderTransformOrigin="0.484,-0.355" Margin="95,0,468,2" Grid.ColumnSpan="2" VerticalContentAlignment="Bottom" />
                 <TextBlock Grid.Row="0" Background="AliceBlue"
                    Grid.Column="1"
                    TextAlignment="Right"
@@ -67,13 +81,14 @@
                     <ColumnDefinition Width="493*" />
                 </Grid.ColumnDefinitions>
                 <!--<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">-->
-                <RadioButton Name="rdoYield" Command="{Binding YieldToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"  GroupName="YieldPV"  Grid.Column="1" Margin="271,8,203,58">Yield</RadioButton>
-                <RadioButton x:Name="rdoPV"  Command="{Binding PVToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" GroupName="YieldPV" Content="Present Value" Grid.Column="1" Margin="122,8,317,58"/>
+                <RadioButton Name="rdoYield" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Command="{Binding YieldToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"  GroupName="YieldPV"  Grid.Column="1" Margin="271,8,203,58">Yield</RadioButton>
+                <RadioButton x:Name="rdoPV" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" IsChecked="True"  Command="{Binding PVToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" GroupName="YieldPV" Content="Present Value" Grid.Column="1" Margin="122,8,317,58"/>
                 <!--</StackPanel>-->
-                <TextBox x:Name="txtYieldPV" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="122,30,0,0" Height="31" HorizontalAlignment="Left" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right">
+                <TextBox x:Name="txtYieldPV" Grid.Column="1" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="122,30,0,0" Height="31" HorizontalAlignment="Left" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right">
                     <TextBox.Style>
                         <Style>
                             <Setter Property="TextBox.Text" Value="{Binding CalculatorModel.Yield,Converter={StaticResource PercentConverter}}" />
+                            
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsChecked, ElementName=rdoYield}" Value="False">
                                     <Setter Property="TextBox.Text" Value="{Binding CalculatorModel.PresentValue, StringFormat={}{0:##.0000}}" />
@@ -89,32 +104,16 @@
                 <Label Content="Maturity (Years)" HorizontalAlignment="Left" Margin="53,25,0,11" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="122"/>
                 <Label Content="Coupon Frequency" HorizontalAlignment="Left" Margin="53,27,0,13" Grid.Row="3" VerticalAlignment="Center" Height="31" Width="139"/>
                 <Label Content="Face Value" HorizontalAlignment="Left" Margin="53,28,0,18" Grid.Row="4" VerticalAlignment="Center" Height="30" Width="88"/>
-                <TextBox Name="txtCouponRate" Text="{Binding Path=CalculatorModel.CouponRate,Converter={StaticResource PercentConverter},Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" HorizontalAlignment="Left" Height="34" Margin="122,5,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom">
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate>
-
-                            <!-- Align text box and error list horizontally -->
-                            <StackPanel Orientation="Horizontal">
-
-                                <AdornedElementPlaceholder x:Name="textBox"/>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ErrorContent}" Foreground="Red"/>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Validation.ErrorTemplate>
+                <TextBox Name="txtCouponRate" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Text="{Binding Path=CalculatorModel.CouponRate,Converter={StaticResource PercentConverter},Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnNotifyDataErrors=True}" Grid.Column="1" HorizontalAlignment="Left" Height="34" Margin="122,5,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom">
+                    
                 </TextBox>
-                <TextBox Name="txtMaturity" Text="{Binding Path=CalculatorModel.YearsToMaturity}" Grid.Column="1" HorizontalAlignment="Left" Height="36" Margin="122,10,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"/>
-                <TextBox Name="txtFrequency" Text="{Binding Path=CalculatorModel.Frequency}" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="122,13,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"/>
-                <TextBox Name="txtFaceValue" Text="{Binding Path=CalculatorModel.FaceValue}" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="122,10,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"/>
+                <TextBox Name="txtMaturity" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Text="{Binding Path=CalculatorModel.YearsToMaturity}" Grid.Column="1" HorizontalAlignment="Left" Height="36" Margin="122,10,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"/>
+                <TextBox Name="txtFrequency" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Text="{Binding Path=CalculatorModel.Frequency}" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="122,13,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" HorizontalContentAlignment="Right" VerticalContentAlignment="Bottom"/>
+                <TextBox Name="txtFaceValue" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Text="{Binding Path=CalculatorModel.FaceValue}" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="122,10,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Center" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right"/>
 
             </Grid>
         </GroupBox>
-        <Button Name="btnCalculate" Command="{Binding Path=CalculateCommand}" Content="Calculate" IsEnabled="{Binding Path=IsValid}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,20,259,9" Grid.Row="2" Width="176" Height="34" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
+        <Button Name="btnCalculate" Command="{Binding Path=CalculateCommand}" Content="Calculate" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,20,259,9" Grid.Row="2" Width="176" Height="34" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
 
     </Grid>
 </Window>

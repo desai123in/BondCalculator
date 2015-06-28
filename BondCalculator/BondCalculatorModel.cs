@@ -15,7 +15,7 @@ namespace BondCalculator
         private int yearsToMaturity = 5;
         private int frequency = 1;
         private decimal faceValue = 1000m;
-        private decimal yield = 0.15m;
+        private decimal yield = 0.0m;
         private decimal presentValue = 550m;
 
         #endregion
@@ -28,8 +28,8 @@ namespace BondCalculator
             {
                 if (!couponRate.Equals(value))
                 {
-                    if (value.CompareTo(1.0m) > 0)
-                        base.AddError("CouponRate", "Greater then 100% rate not allowed");
+                    if (value.CompareTo(1.0m) > 0 || value.CompareTo(0.001m) <0)
+                        base.AddError("CouponRate", "Allowed range: 0.1% to 100% ");
                     else
                         base.RemoveError("CouponRate");
                     couponRate = value;
@@ -41,45 +41,80 @@ namespace BondCalculator
         public int YearsToMaturity
         {
             get { return yearsToMaturity; }
-            set { 
-                    yearsToMaturity = value;
-                    NotifyPropertyChanged("YearsToMaturity");
+            set {
+                if (!yearsToMaturity.Equals(value))
+                    {
+                        if (value.CompareTo(0) < 0 || value.CompareTo(800) > 0)
+                            base.AddError("YearsToMaturity", "Allowed range: 1 to 100");
+                        else
+                            base.RemoveError("YearsToMaturity");
+
+                        yearsToMaturity = value;
+                        NotifyPropertyChanged("YearsToMaturity");
+                    }                   
                 }
         }
 
         public int Frequency
         {
             get { return frequency; }
-            set { 
-                    frequency = value;
-                    NotifyPropertyChanged("Frequency");
+            set {                     
+
+                    if (!frequency.Equals(value))
+                    {
+                        if (value.CompareTo(1) < 0 || value.CompareTo(4) > 0)
+                            base.AddError("Frequency", "Allowed range: 1 to 4");
+                        else
+                            base.RemoveError("Frequency");
+
+                        frequency = value;
+                        NotifyPropertyChanged("Frequency");
+                    }
                 }
         }
 
         public decimal FaceValue
         {
             get { return faceValue; }
-            set { 
-                    faceValue = value;
-                    NotifyPropertyChanged("FaceValue");
+            set {
+                if (!faceValue.Equals(value))
+                    {
+                        if (value.CompareTo(0.0m) < 0)
+                            base.AddError("FaceValue", "Allowed range: Non Negetive value ");
+                        else
+                            base.RemoveError("FaceValue");                     
+
+                        faceValue = value;
+                        NotifyPropertyChanged("FaceValue");
+                    }
                 }
         }
 
         public decimal Yield
         {
             get { return yield; }
-            set { 
-                    yield = value;
-                    NotifyPropertyChanged("Yield");
+            set {
+                    if (!yield.Equals(value))
+                    {
+                        if (value.CompareTo(1.0m) > 0)
+                            base.AddError("Yield", "Allowed range: < 100% ");
+                        else
+                            base.RemoveError("Yield");
+                        yield = value;
+                        NotifyPropertyChanged("Yield");
+                    }                   
                 }
         }
 
         public decimal PresentValue
         {
             get { return presentValue; }
-            set { 
-                    presentValue = value;
-                    NotifyPropertyChanged("PresentValue");
+            set {
+                    if (!presentValue.Equals(value))
+                    {
+                        presentValue = value;
+                        NotifyPropertyChanged("PresentValue");
+                    }
                 }
         }
 

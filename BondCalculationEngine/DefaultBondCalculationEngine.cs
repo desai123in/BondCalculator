@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
+
 
 namespace BondCalculationEngine
 {
@@ -24,7 +25,7 @@ namespace BondCalculationEngine
         decimal IBondCalculationEngine.CalculateYield(decimal couponRate, int yearsToMaturity, int frequency, decimal faceValue, decimal presentValue)
         {
             try
-            {
+            {                
                 return YIELD(yearsToMaturity, couponRate, presentValue, faceValue, frequency);
             }
             catch (Exception e)
@@ -38,7 +39,7 @@ namespace BondCalculationEngine
 
         private decimal PowerDecimal(decimal num, decimal power)
         {
-            decimal res = 1m;
+            decimal res = 1.0m;
             for (int i = 1; i <= power; i++)
             {
                 res = res * num;
@@ -56,38 +57,39 @@ namespace BondCalculationEngine
             return x;
         }
 
-        private decimal PRICE(int yearsToMaturity, decimal rate, decimal yld, decimal redemption,int frequency)
+        private decimal PRICE(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
         {
 
-            decimal presentValueOfRedemption = redemption / PowerDecimal(1 + yld / frequency, yearsToMaturity);
+            decimal presentValueOfRedemption = faceValue / PowerDecimal(1 + yld / frequency, yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
-                presentValueOfCouponPayments += (redemption * rate / frequency) / PowerDecimal(1 + yld / frequency, k);
+                presentValueOfCouponPayments += (faceValue * rate / frequency) / PowerDecimal(1 + yld / frequency, k);
             }
 
             return presentValueOfRedemption + presentValueOfCouponPayments;
         }
 
 
-        private decimal FirstDerivativeOfPRICE(int yearsToMaturity, decimal rate, decimal yld,decimal redemption, int frequency)
+        private decimal FirstDerivativeOfPRICE(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
         {
 
 
-            decimal presentValueOfRedemption = redemption * (1 - yearsToMaturity) * PowerDecimal(1 + yld / frequency, -yearsToMaturity);
+            decimal presentValueOfRedemption = faceValue * (1 - yearsToMaturity) * PowerDecimal(1 + yld / frequency, -yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
-                presentValueOfCouponPayments += (redemption * (1 - k) * rate * PowerDecimal(1 + yld / frequency, -k)) / PowerDecimal(frequency, 2);
+                presentValueOfCouponPayments += (faceValue * (1 - k) * rate * PowerDecimal(1 + yld / frequency, -k)) / PowerDecimal(frequency, 2);
             }
 
             return presentValueOfRedemption + presentValueOfCouponPayments;
         }
-        private decimal YIELD(int yearsToMaturity, decimal rate, decimal pr, decimal redemption,int frequency)
+        private decimal YIELD(int yearsToMaturity, decimal rate, decimal pr, decimal faceValue,int frequency)
         {
+            //twik with num iterations for solving
             return Solve(
-                x => PRICE(yearsToMaturity, rate, x, redemption, frequency) - pr,
-                y => FirstDerivativeOfPRICE(yearsToMaturity, rate, y, redemption, frequency), 100);
+                x => PRICE(yearsToMaturity, rate, x, faceValue, frequency) - pr,
+                y => FirstDerivativeOfPRICE(yearsToMaturity, rate, y, faceValue, frequency), 800);
         }
 
         #endregion
