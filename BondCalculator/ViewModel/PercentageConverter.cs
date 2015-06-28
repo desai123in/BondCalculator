@@ -8,8 +8,13 @@ using System.Globalization;
 
 namespace BondCalculator.ViewModel
 {
+    /// <summary>
+    /// decimal to percentage converter, created for yield/coupon attributes
+    /// </summary>
+
     public class PercentageConverter : IValueConverter
     {
+        #region IValueConverter Members
         //E.g. Model 0.042367 --> UI "4.2367%"
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,5 +33,7 @@ namespace BondCalculator.ViewModel
             var valueWithoutPercentage = value.ToString().TrimEnd(' ', '%');
             return decimal.Parse(valueWithoutPercentage) / 100;
         }
+
+        #endregion //IValueConverter Members
     }
 }

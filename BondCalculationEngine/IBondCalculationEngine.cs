@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BondCalculationEngine
 {
+    //Base interface, takes basic value types as parameters to not link it to any spcific model
     public interface IBondCalculationEngine
     {
         decimal CalculatePresentValue(decimal couponRate, int yearsToMaturity, int frequency, decimal faceValue, decimal discountRate);

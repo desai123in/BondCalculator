@@ -8,6 +8,7 @@ using System.ComponentModel;
 
 namespace BondCalculator.Model
 {
+    //base class for models that needs to bind to UI
     public class ModelBase : INotifyPropertyChanged, INotifyDataErrorInfo
 {
     #region Property changed

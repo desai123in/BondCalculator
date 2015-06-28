@@ -3,18 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-
+using BondCalculator.Common;
 
 namespace BondCalculationEngine
 {
+    //This is default implementation of interface
+    //Uses Newton solver using first Derivative of Price function
+    //number iterations to for solving can changed as per usage.
     public class DefaultBondCalculationEngine:IBondCalculationEngine
     {
-        private int numIterations = 1200;
+        #region Construtors
+        public DefaultBondCalculationEngine()
+        {
+           try
+           {
+               //this setting should ideally be in dll config file
+               numIterations = AppConfig.Instance.YieldSolverIterations;
+           }
+           catch(Exception e)
+           {
+               //log exception
+           }
+        }
+        #endregion //Construtors
+
+        #region Private Fields
+        private int numIterations;
+        #endregion //Private Fields
+        #region Public Properties
+
         public int NumIterations
         {
             get { return numIterations; }
             set { numIterations = value; }
         }
+        #endregion //Public Properties
 
         #region IBondCalculationEngine
         decimal IBondCalculationEngine.CalculatePresentValue(decimal couponRate, int yearsToMaturity, int frequency, decimal faceValue, decimal discountRate)
@@ -69,14 +92,14 @@ namespace BondCalculationEngine
         private decimal Price(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
         {
 
-            decimal presentValueOfRedemption = faceValue / PowerDecimal(1 + yld / frequency, yearsToMaturity);
+            decimal presentValue = faceValue / PowerDecimal(1 + yld / frequency, yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
                 presentValueOfCouponPayments += (faceValue * rate / frequency) / PowerDecimal(1 + yld / frequency, k);
             }
 
-            return presentValueOfRedemption + presentValueOfCouponPayments;
+            return presentValue + presentValueOfCouponPayments;
         }
 
 
@@ -84,14 +107,14 @@ namespace BondCalculationEngine
         {
 
 
-            decimal presentValueOfRedemption = faceValue * (1 - yearsToMaturity) * PowerDecimal(1 + yld / frequency, -yearsToMaturity);
+            decimal presentValue = faceValue * (1 - yearsToMaturity) * PowerDecimal(1 + yld / frequency, -yearsToMaturity);
             decimal presentValueOfCouponPayments = 0;
             for (int k = 1; k <= yearsToMaturity; k++)
             {
                 presentValueOfCouponPayments += (faceValue * (1 - k) * rate * PowerDecimal(1 + yld / frequency, -k)) / PowerDecimal(frequency, 2);
             }
 
-            return presentValueOfRedemption + presentValueOfCouponPayments;
+            return presentValue + presentValueOfCouponPayments;
         }
         private decimal SolveYield(int yearsToMaturity, decimal rate, decimal pr, decimal faceValue,int frequency)
         {

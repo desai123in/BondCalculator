@@ -79,11 +79,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="199*" />
                     <ColumnDefinition Width="493*" />
-                </Grid.ColumnDefinitions>
-                <!--<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">-->
+                </Grid.ColumnDefinitions>             
                 <RadioButton Name="rdoYield" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Command="{Binding YieldToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"  GroupName="YieldPV"  Grid.Column="1" Margin="271,8,203,58">Yield</RadioButton>
-                <RadioButton x:Name="rdoPV" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" IsChecked="True"  Command="{Binding PVToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" GroupName="YieldPV" Content="Present Value" Grid.Column="1" Margin="122,8,317,58"/>
-                <!--</StackPanel>-->
+                <RadioButton x:Name="rdoPV" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" IsChecked="True"  Command="{Binding PVToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" GroupName="YieldPV" Content="Present Value" Grid.Column="1" Margin="122,8,317,58"/>                
                 <TextBox x:Name="txtYieldPV" Grid.Column="1" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="122,30,0,0" Height="31" HorizontalAlignment="Left" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right" >
                     <TextBox.Style>
                         <Style>
@@ -96,10 +94,7 @@
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
-                </TextBox>
-                <!--<CheckBox Name="cbSample" Content="Hello, world?" />-->
-
-                <!--</StackPanel>-->
+                </TextBox>               
                 <Label Content="Coupon Rate"  HorizontalAlignment="Left" Margin="53,20,0,13" Grid.Row="1" VerticalAlignment="Center" Height="33" Width="110"/>
                 <Label Content="Maturity (Years)" HorizontalAlignment="Left" Margin="53,25,0,11" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="122"/>
                 <Label Content="Coupon Frequency" HorizontalAlignment="Left" Margin="53,27,0,13" Grid.Row="3" VerticalAlignment="Center" Height="31" Width="139"/>

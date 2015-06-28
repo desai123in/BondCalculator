@@ -8,6 +8,9 @@
 
 namespace BondCalculator.ViewModel
     {
+        /// <summary>
+        /// Simple implementation of ICommand which takes two delegates and execute them in response to ICommand methods
+        /// </summary>
         public class DelegateCommand : ICommand
         {
             #region Fields

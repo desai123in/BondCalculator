@@ -30,14 +30,15 @@ namespace BondCalculator.ViewModel
             //create model object
             calculatorModel = new BondCalculatorModel();
             
-            //create calculation engine object, this will ideally come through Unity or other DI container
-            calculationEngine = Factory.GetBondCalculationEngine("Default");            
+            //create calculation engine object using Unity container
+            //we can register other types for this interface in unity and use here e.g. FincadCalculationEngine, BrentEngine
+            calculationEngine = UnityFactory.Resolve<IBondCalculationEngine>("Default");          
 
             //register event from model, will be raised when error state of model properties will change
             //will be used to enable/disable calculator button/radio button
             calculatorModel.NotifyVM = () => { NotifyPropertyChanged("ReadyForCalculation"); };
 
-
+            //command that binds to Calculate button.
             CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => ((ReadyForCalculation) && (!calculationRunning)));
             
             //capture action when user wants to switch from ComputeYield to ComputePV and vice-versa
@@ -90,11 +91,15 @@ namespace BondCalculator.ViewModel
             }
 
         }
+
+        #endregion //Public Properties
+
+        #region Commands
         public DelegateCommand CalculateCommand { get; private set; }
         public DelegateCommand YieldToggleCommand { get; private set; }
         public DelegateCommand PVToggleCommand { get; private set; }
 
-        #endregion
+        #endregion //Commands
 
 
         #region Private Methods
@@ -103,15 +108,7 @@ namespace BondCalculator.ViewModel
         private void PriceBond()
         {
 
-                //this is to set number of iterations to do for solver
-                //ideally this should set in Engine configuration file (ie. dllconfig file of BondCalculationEngine project) and not in app config
                 
-                var calengine = calculationEngine as DefaultBondCalculationEngine;                
-                if (calengine != null)
-                {
-                    calengine.NumIterations = AppConfig.Instance.YieldSolverIterations;
-                }
-
                 StatusText = "Calculation In Progress......";
                 calculationRunning = true;
                 NotifyPropertyChanged("ReadyForCalculation");
@@ -123,8 +120,7 @@ namespace BondCalculator.ViewModel
                         .ContinueWith(t => 
                         {
                             try
-                            {
-                                string dd = "dd";
+                            {                               
                                 if (t.Result < 1)
                                 {
                                     decimal res = t.Result;
@@ -189,6 +185,7 @@ namespace BondCalculator.ViewModel
             
         }
 
+        //helper method to raise property change event on UI
         private void NotifyPropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
@@ -198,9 +195,6 @@ namespace BondCalculator.ViewModel
             }
         }
         #endregion
-
-
-
 
     }
 }

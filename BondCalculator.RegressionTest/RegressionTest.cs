@@ -9,16 +9,29 @@ using System.IO;
 
 namespace BondCalculator.RegressionTest
 {
+    /// <summary>
+    /// Tests here are regression tests and should be run on local developer machine as well as build server
+    /// after successful build to catch any regression introduced by code.
+    /// update expectation file when new cases are introduced:
+    /// YieldFromPV.csv 
+    ///     input: couponRate,yearsToMaturity,frequency,faceValue,presentValue
+    ///     expectation: yield    ///     
+    /// PVFromYield.csv
+    ///     input: couponRate,yearsToMaturity,frequency,faceValue,yield
+    ///     expectation: presentValue
+    /// </summary>
     [TestClass]
     public class RegressionTest
     {
+
         [TestMethod]
         [DeploymentItem("YieldFromPV.csv")]
         public void ProcessYieldFromPVExpectation()
         {
-            List<BondCalculatorModel> inputs = ReadTestInput("YieldFromPV.csv",true);
+            //read input from file (user can supply input and expected output in file
 
-            IBondCalculationEngine engine = Factory.GetBondCalculationEngine("Default");
+            List<BondCalculatorModel> inputs = ReadTestInput("YieldFromPV.csv",true);
+            IBondCalculationEngine engine = UnityFactory.Resolve<IBondCalculationEngine>("Default");
 
             foreach(var input in inputs)
             {
@@ -28,8 +41,6 @@ namespace BondCalculator.RegressionTest
                 actualYield = CommonUtils.Truncate(actualYield, 9);
                 Assert.AreEqual<decimal>(expectedYield, actualYield);
             }
-
-
         }
 
         [TestMethod]
@@ -38,7 +49,7 @@ namespace BondCalculator.RegressionTest
         {
             List<BondCalculatorModel> inputs = ReadTestInput("PVFromYield.csv",false);
 
-            IBondCalculationEngine engine = Factory.GetBondCalculationEngine("Default");
+            IBondCalculationEngine engine = UnityFactory.Resolve<IBondCalculationEngine>("Default");
 
             foreach (var input in inputs)
             {
@@ -48,8 +59,6 @@ namespace BondCalculator.RegressionTest
                 actualPresentValue = CommonUtils.Truncate(actualPresentValue, 7);
                 Assert.AreEqual<decimal>(expectedPresentValue, actualPresentValue);
             }
-
-
         }
 
 
@@ -77,8 +86,7 @@ namespace BondCalculator.RegressionTest
                     {
                         model.Yield = csv.GetField<decimal>(4);
                         model.PresentValue = csv.GetField<decimal>(5);                        
-                    }
-                    
+                    }                    
 
                     inputs.Add(model);
                 } 

@@ -8,6 +8,12 @@ using BondCalculator.Common;
 
 namespace BondCalculator.Model
 {
+    /// <summary>
+    /// Model to bind bond attributes to UI
+    /// supports Property notification and data validation
+    /// some validation rules are assumed as not specified in requirements.
+    /// coupon frequency is added which can be from 1 to 4 coupon payment per year
+    /// </summary>
     public class BondCalculatorModel:ModelBase
     {
         #region Private Fields
