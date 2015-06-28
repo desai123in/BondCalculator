@@ -16,8 +16,10 @@ namespace BondCalculator.ViewModel
         #region Private Fields
         private BondCalculatorModel calculatorModel;
         private IBondCalculationEngine calculationEngine;
+        //this field will inform viewmodel if Yield or PV needs to be computed.
         private bool yieldGiven;
         private string statusText = "";
+        //this field is to prevent user from running new calculation when one is already pending.
         private bool calculationRunning = false;
 
         #endregion
@@ -25,14 +27,20 @@ namespace BondCalculator.ViewModel
         #region Constructors
         public BondCalculatorViewModel()
         {
+            //create model object
             calculatorModel = new BondCalculatorModel();
+            
+            //create calculation engine object, this will ideally come through Unity or other DI container
             calculationEngine = Factory.GetBondCalculationEngine("Default");
 
+            //register event from model, will be raised when error state of model properties will change
+            //will be used to enable/disable calculator button/radio button
             calculatorModel.NotifyVM = () => { NotifyPropertyChanged("ReadyForCalculation"); };
 
 
             CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => ((ReadyForCalculation) && (!calculationRunning)));
             
+            //capture action when user wants to switch from ComputeYield to ComputePV and vice-versa
             YieldToggleCommand = new DelegateCommand(param => { 
                 yieldGiven = (bool)param;
                 StatusText = "";
@@ -73,6 +81,7 @@ namespace BondCalculator.ViewModel
             
         }
 
+        //to update user of calculation status
         public string StatusText
         {
             get { return this.statusText; }
@@ -90,6 +99,7 @@ namespace BondCalculator.ViewModel
 
         #region Private Methods
 
+        //this method will be called when user clicks Calculate button
         private void PriceBond()
         {
             
@@ -97,6 +107,7 @@ namespace BondCalculator.ViewModel
                 calculationRunning = true;
                 NotifyPropertyChanged("ReadyForCalculation");
 
+                //if we want to compute Yield
                 if (!yieldGiven)
                 {                   
                     Task<decimal>.Factory.StartNew(() => calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue))
@@ -109,13 +120,14 @@ namespace BondCalculator.ViewModel
                                     calculatorModel.Yield = t.Result;
                                     StatusText = "Yield = ";
                                 }
-                                else
+                                else //if calculation comes back with yield > 100% then just show error
                                 {
                                     /*todo:log excepion*/
                                     StatusText = "Error: Yield > 100%";
                                 }
                                
                             }
+                            //catch errors coming from Task
                             catch (AggregateException ae)
                             {
                                 /*todo:log excepion*/
@@ -126,7 +138,7 @@ namespace BondCalculator.ViewModel
                                 /*todo:log excepion*/
                                 StatusText = "Error in calculation.";
                             }
-                            finally
+                            finally //clear calculation status and notify View of the same.
                             {
                                 calculationRunning = false;
                                 NotifyPropertyChanged("ReadyForCalculation");

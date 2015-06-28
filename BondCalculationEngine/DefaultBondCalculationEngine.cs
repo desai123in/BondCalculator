@@ -15,7 +15,7 @@ namespace BondCalculationEngine
             try
             {
                
-                return PRICE(yearsToMaturity, couponRate, discountRate, faceValue, frequency);
+                return Price(yearsToMaturity, couponRate, discountRate, faceValue, frequency);
             }
             catch(Exception e)
             {
@@ -28,10 +28,11 @@ namespace BondCalculationEngine
             try
             {
                
-                return YIELD(yearsToMaturity, couponRate, presentValue, faceValue, frequency);
+                return SolveYield(yearsToMaturity, couponRate, presentValue, faceValue, frequency);
             }
             catch (Exception e)
             {
+                //todo: log exception
                 throw e;
             }
         }
@@ -59,7 +60,7 @@ namespace BondCalculationEngine
             return x;
         }
 
-        private decimal PRICE(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
+        private decimal Price(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
         {
 
             decimal presentValueOfRedemption = faceValue / PowerDecimal(1 + yld / frequency, yearsToMaturity);
@@ -73,7 +74,7 @@ namespace BondCalculationEngine
         }
 
 
-        private decimal FirstDerivativeOfPRICE(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
+        private decimal PriceDerivative(int yearsToMaturity, decimal rate, decimal yld, decimal faceValue, int frequency)
         {
 
 
@@ -86,12 +87,12 @@ namespace BondCalculationEngine
 
             return presentValueOfRedemption + presentValueOfCouponPayments;
         }
-        private decimal YIELD(int yearsToMaturity, decimal rate, decimal pr, decimal faceValue,int frequency)
+        private decimal SolveYield(int yearsToMaturity, decimal rate, decimal pr, decimal faceValue,int frequency)
         {
             //twik with num iterations for solving
             return Solve(
-                x => PRICE(yearsToMaturity, rate, x, faceValue, frequency) - pr,
-                y => FirstDerivativeOfPRICE(yearsToMaturity, rate, y, faceValue, frequency), 1200);
+                x => Price(yearsToMaturity, rate, x, faceValue, frequency) - pr,
+                y => PriceDerivative(yearsToMaturity, rate, y, faceValue, frequency), 1200);
         }
 
         #endregion

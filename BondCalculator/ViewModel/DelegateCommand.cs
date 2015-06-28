@@ -19,17 +19,15 @@ namespace BondCalculator.ViewModel
 
             #region Constructors
 
-            /// <summary>
-            /// Creates a new command that can always execute.
-            /// </summary>
-            /// <param name="execute">The execution logic.</param>
+            
+            // Creates a new command that can always execute.            
             public DelegateCommand(Action<object> execute)
                 : this(execute, null)
             {
             }
 
-            /// <summary>
-            /// Creates a new command.
+            
+            // Creates a new command.
             /// </summary>
             /// <param name="execute">The execution logic.</param>
             /// <param name="canExecute">The execution status logic.</param>

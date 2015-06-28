@@ -24,7 +24,7 @@ namespace BondCalculator.ViewModel
         //E.g. UI "4.2367 %" --> Model 0.042367
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //Trim any trailing percentage symbol that the user MAY have included
+            //Trim any trailing percentage symbol that the user may have included
             var valueWithoutPercentage = value.ToString().TrimEnd(' ', '%');
             return decimal.Parse(valueWithoutPercentage) / 100;
         }

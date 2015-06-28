@@ -12,7 +12,7 @@ namespace BondCalculator.Model
 {
     #region Property changed
     public event PropertyChangedEventHandler PropertyChanged;
-    public Action NotifyVM;
+    public Action NotifyVM; // to notify any consumer who wants to be notified when Error status changes.
  
     protected void NotifyPropertyChanged(string propertyName)
     {

@@ -16,7 +16,7 @@ namespace BondCalculator.Model
         private int frequency = 1;
         private decimal faceValue = 1000m;
         private decimal yield = 0.0m;
-        private decimal presentValue = 550m;
+        private decimal presentValue = 832.40m;
 
         #endregion
         #region Public Properties
@@ -44,7 +44,7 @@ namespace BondCalculator.Model
             set {
                 if (!yearsToMaturity.Equals(value))
                     {
-                        if (value.CompareTo(0) < 0 || value.CompareTo(800) > 0)
+                        if (value.CompareTo(0) < 0 || value.CompareTo(100) > 0)
                             base.AddError("YearsToMaturity", "Allowed range: 1 to 100");
                         else
                             base.RemoveError("YearsToMaturity");
