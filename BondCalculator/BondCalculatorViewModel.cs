@@ -91,11 +91,11 @@ namespace BondCalculator
 
         private void PriceBond()
         {
-            try
-            {
+            
                 StatusText = "Calculation In Progress......";
                 calculationRunning = true;
                 NotifyPropertyChanged("ReadyForCalculation");
+
                 if (!yieldGiven)
                 {                   
                     Task<decimal>.Factory.StartNew(() => calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue))
@@ -103,15 +103,26 @@ namespace BondCalculator
                         {
                             try
                             {
-                                if (!t.IsFaulted)
+                                if (t.Result < 1)
                                 {
                                     calculatorModel.Yield = t.Result;
                                     StatusText = "Yield = ";
                                 }
+                                else
+                                {
+                                    /*todo:log excepion*/
+                                    StatusText = "Error: Yield > 100%";
+                                }
+                               
                             }
                             catch (AggregateException ae)
                             {
-                                //log excepion
+                                /*todo:log excepion*/
+                                StatusText = "Error in calculation.";
+                            }
+                            catch (Exception e)
+                            {
+                                /*todo:log excepion*/
                                 StatusText = "Error in calculation.";
                             }
                             finally
@@ -122,21 +133,20 @@ namespace BondCalculator
                         }, TaskScheduler.FromCurrentSynchronizationContext());
                 }
                 else
-                {                    
+                {
                     Task<decimal>.Factory.StartNew(() => calculationEngine.CalculatePresentValue(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.Yield))
-                            .ContinueWith(t => 
+                            .ContinueWith(t =>
                             {
                                 try
                                 {
-                                    if (!t.IsFaulted)
-                                    {
-                                        calculatorModel.PresentValue = t.Result;
-                                        StatusText = "Present Value = ";
-                                    }
+
+                                    calculatorModel.PresentValue = t.Result;
+                                    StatusText = "Present Value = ";
+
                                 }
                                 catch (AggregateException ae)
                                 {
-                                    //log excepion
+                                    /*todo:log excepion*/
                                     StatusText = "Error in calculation.";
                                 }
                                 finally
@@ -146,13 +156,8 @@ namespace BondCalculator
                                 }
 
                             }, TaskScheduler.FromCurrentSynchronizationContext());
-                }
-            }           
-            catch (Exception e)
-            {
-                //log excepion
-                StatusText = "Error in calculation.";
-            }            
+                            
+                }                  
             
         }
 

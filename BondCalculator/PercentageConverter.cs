@@ -13,8 +13,12 @@ namespace BondCalculator
         //E.g. Model 0.042367 --> UI "4.2367%"
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            int i = 4;
+            if(parameter != null)
+                Int32.TryParse(parameter.ToString(), out i);
+
             var fraction = decimal.Parse(value.ToString());
-            return fraction.ToString("P4");
+            return fraction.ToString(string.Format("P{0}",i));
         }
 
         //E.g. UI "4.2367 %" --> Model 0.042367

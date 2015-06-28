@@ -54,7 +54,7 @@
                    >
                     <TextBlock.Style>
                         <Style>
-                            <Setter Property="TextBlock.Text" Value="{Binding CalculatorModel.Yield, StringFormat={}{0:##.000000000}}" />
+                            <Setter Property="TextBlock.Text" Value="{Binding CalculatorModel.Yield, Converter={StaticResource PercentConverter}, ConverterParameter=7}" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=rdoYield, Path=IsChecked}" Value="True">
                                     <Setter Property="TextBlock.Text" Value="{Binding CalculatorModel.PresentValue, StringFormat={}{0:##.0000000}}" />

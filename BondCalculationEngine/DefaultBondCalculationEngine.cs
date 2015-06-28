@@ -14,6 +14,7 @@ namespace BondCalculationEngine
         {
             try
             {
+               
                 return PRICE(yearsToMaturity, couponRate, discountRate, faceValue, frequency);
             }
             catch(Exception e)
@@ -25,7 +26,8 @@ namespace BondCalculationEngine
         decimal IBondCalculationEngine.CalculateYield(decimal couponRate, int yearsToMaturity, int frequency, decimal faceValue, decimal presentValue)
         {
             try
-            {                
+            {
+               
                 return YIELD(yearsToMaturity, couponRate, presentValue, faceValue, frequency);
             }
             catch (Exception e)
