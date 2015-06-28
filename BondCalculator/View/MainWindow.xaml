@@ -33,7 +33,7 @@
             <GroupBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Gray" Offset="0"/>
-                    <GradientStop Color="#FF9CCDCB" Offset="1"/>
+                    <GradientStop Color="#FFE0E6E6" Offset="1"/>
                 </LinearGradientBrush>
             </GroupBox.Background>
             <Grid Margin="25,22,2,10">
@@ -45,7 +45,7 @@
                     <ColumnDefinition Width="199*"/>
                     <ColumnDefinition Width="493*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="{Binding Path=StatusText, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="41" VerticalAlignment="Bottom" RenderTransformOrigin="0.484,-0.355" Margin="95,0,468,2" Grid.ColumnSpan="2" VerticalContentAlignment="Bottom" />
+                <Label Content="{Binding Path=StatusText, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Height="41" VerticalAlignment="Bottom" RenderTransformOrigin="0.484,-0.355" Margin="95,0,468,2" Grid.ColumnSpan="2" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right" />
                 <TextBlock Grid.Row="0" Background="AliceBlue"
                    Grid.Column="1"
                    TextAlignment="Right"
@@ -65,7 +65,7 @@
                 </TextBlock>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Input" Margin="0,141,0,0" Grid.RowSpan="2" Background="#FF709E9A" FontWeight="Bold" FontSize="14">
+        <GroupBox Header="Input" Margin="0,141,0,0" Grid.RowSpan="2" Background="#FFC8DAD9" FontWeight="Bold" FontSize="14">
             <Grid Margin="0,0,0,-12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60*" />
@@ -84,7 +84,7 @@
                 <RadioButton Name="rdoYield" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Command="{Binding YieldToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}"  GroupName="YieldPV"  Grid.Column="1" Margin="271,8,203,58">Yield</RadioButton>
                 <RadioButton x:Name="rdoPV" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" IsChecked="True"  Command="{Binding PVToggleCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Self}}" GroupName="YieldPV" Content="Present Value" Grid.Column="1" Margin="122,8,317,58"/>
                 <!--</StackPanel>-->
-                <TextBox x:Name="txtYieldPV" Grid.Column="1" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="122,30,0,0" Height="31" HorizontalAlignment="Left" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right">
+                <TextBox x:Name="txtYieldPV" Grid.Column="1" Validation.ErrorTemplate="{StaticResource ErrorTemplate}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="122,30,0,0" Height="31" HorizontalAlignment="Left" Width="191" VerticalContentAlignment="Bottom" HorizontalContentAlignment="Right" >
                     <TextBox.Style>
                         <Style>
                             <Setter Property="TextBox.Text" Value="{Binding CalculatorModel.Yield,Converter={StaticResource PercentConverter}}" />
@@ -113,7 +113,7 @@
 
             </Grid>
         </GroupBox>
-        <Button Name="btnCalculate" Command="{Binding Path=CalculateCommand}" Content="Calculate" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,20,259,9" Grid.Row="2" Width="176" Height="34" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
+        <Button Name="btnCalculate" Style="{StaticResource ResourceKey=CalcBtn}" Command="{Binding Path=CalculateCommand}" Content="Calculate" IsEnabled ="{Binding Path=ReadyForCalculation, Mode=OneWay}" Grid.Column="0" HorizontalAlignment="Right" Margin="0,20,259,9" Grid.Row="2" Width="176" Height="34" VerticalAlignment="Center" FontWeight="Bold" FontSize="16"/>
 
     </Grid>
 </Window>

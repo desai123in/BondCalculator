@@ -57,7 +57,7 @@ namespace BondCalculationEngine
             return res;
         }
 
-        private decimal Solve(Func<decimal, decimal> function, Func<decimal, decimal> derivativeFunction, int iterations, decimal startingValue = 0m)
+        private decimal Solve(Func<decimal, decimal> function, Func<decimal, decimal> derivativeFunction, int iterations, decimal startingValue = 0.0m)
         {
             decimal x = startingValue;
             for (int i = 0; i < iterations; i++)
