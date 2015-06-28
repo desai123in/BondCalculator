@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BondCalculationEngine", "Bo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BondCalculator.Common", "BondCalculator.Common\BondCalculator.Common.csproj", "{B8FFE1D2-1B9E-416F-8A7C-0457509067C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BondCalculator.UnitTests", "BondCalculator.UnitTests\BondCalculator.UnitTests.csproj", "{04DDE52E-C243-4BDC-A412-DB379DED1507}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,12 @@ Global
 		{B8FFE1D2-1B9E-416F-8A7C-0457509067C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8FFE1D2-1B9E-416F-8A7C-0457509067C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8FFE1D2-1B9E-416F-8A7C-0457509067C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04DDE52E-C243-4BDC-A412-DB379DED1507}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

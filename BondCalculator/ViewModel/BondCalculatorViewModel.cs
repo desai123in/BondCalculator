@@ -31,7 +31,7 @@ namespace BondCalculator.ViewModel
             calculatorModel = new BondCalculatorModel();
             
             //create calculation engine object, this will ideally come through Unity or other DI container
-            calculationEngine = Factory.GetBondCalculationEngine("Default");
+            calculationEngine = Factory.GetBondCalculationEngine("Default");            
 
             //register event from model, will be raised when error state of model properties will change
             //will be used to enable/disable calculator button/radio button
@@ -102,7 +102,16 @@ namespace BondCalculator.ViewModel
         //this method will be called when user clicks Calculate button
         private void PriceBond()
         {
-            
+
+                //this is to set number of iterations to do for solver
+                //ideally this should set in Engine configuration file (ie. dllconfig file of BondCalculationEngine project) and not in app config
+                
+                var calengine = calculationEngine as DefaultBondCalculationEngine;                
+                if (calengine != null)
+                {
+                    calengine.NumIterations = AppConfig.Instance.YieldSolverIterations;
+                }
+
                 StatusText = "Calculation In Progress......";
                 calculationRunning = true;
                 NotifyPropertyChanged("ReadyForCalculation");
@@ -117,7 +126,10 @@ namespace BondCalculator.ViewModel
                             {
                                 if (t.Result < 1)
                                 {
-                                    calculatorModel.Yield = t.Result;
+                                    decimal res = t.Result;
+                                    res = CommonUtils.Truncate(res, AppConfig.Instance.YieldPrecision);
+
+                                    calculatorModel.Yield = res;
                                     StatusText = "Yield = ";
                                 }
                                 else //if calculation comes back with yield > 100% then just show error
@@ -152,8 +164,10 @@ namespace BondCalculator.ViewModel
                             {
                                 try
                                 {
+                                    decimal res = t.Result;
+                                    res = CommonUtils.Truncate(res, AppConfig.Instance.PresentValuePrecision);
 
-                                    calculatorModel.PresentValue = t.Result;
+                                    calculatorModel.PresentValue = res;
                                     StatusText = "Present Value = ";
 
                                 }

@@ -9,6 +9,13 @@ namespace BondCalculationEngine
 {
     public class DefaultBondCalculationEngine:IBondCalculationEngine
     {
+        private int numIterations = 1200;
+        public int NumIterations
+        {
+            get { return numIterations; }
+            set { numIterations = value; }
+        }
+
         #region IBondCalculationEngine
         decimal IBondCalculationEngine.CalculatePresentValue(decimal couponRate, int yearsToMaturity, int frequency, decimal faceValue, decimal discountRate)
         {
@@ -90,9 +97,10 @@ namespace BondCalculationEngine
         private decimal SolveYield(int yearsToMaturity, decimal rate, decimal pr, decimal faceValue,int frequency)
         {
             //twik with num iterations for solving
+            
             return Solve(
                 x => Price(yearsToMaturity, rate, x, faceValue, frequency) - pr,
-                y => PriceDerivative(yearsToMaturity, rate, y, faceValue, frequency), 1200);
+                y => PriceDerivative(yearsToMaturity, rate, y, faceValue, frequency), numIterations);
         }
 
         #endregion
