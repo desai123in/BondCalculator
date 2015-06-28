@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using BondCalculationEngine;
 using BondCalculator.Common;
+using System.Threading;
 
 namespace BondCalculator
 {
@@ -14,7 +15,9 @@ namespace BondCalculator
         #region Private Fields
         private BondCalculatorModel calculatorModel;
         private IBondCalculationEngine calculationEngine;
-        private bool calculateYield;
+        private bool yieldGiven;
+        private string statusText = "";
+        private bool calculationRunning = false;
 
         #endregion
 
@@ -25,8 +28,13 @@ namespace BondCalculator
             calculationEngine = Factory.GetBondCalculationEngine("Default");
 
             calculatorModel.NotifyVM = () => { NotifyPropertyChanged("IsValid"); };
-            CalculateCommand = new DelegateCommand(param => { _calc.Number(Convert.ToInt32(param)); UpdateDisplay(); },
-                                            param => _calc.CanDoNumber());
+            //CalculateCommand = new DelegateCommand(param => { _calc.Number(Convert.ToInt32(param)); UpdateDisplay(); },
+            //                                param => _calc.CanDoNumber());
+
+            CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => IsValid && !calculationRunning);
+            YieldToggleCommand = new DelegateCommand(param => { yieldGiven = (bool)param; StatusText = ""; }, (param) => true);
+            PVToggleCommand = new DelegateCommand(param => { yieldGiven = !(bool)param; StatusText = ""; }, (param) => true);
+
         }
         #endregion
 
@@ -47,12 +55,17 @@ namespace BondCalculator
             
         }
 
-        public bool CalcluateYield
+        public string StatusText
         {
-            set { calculateYield = value; }
-        }
+            get { return this.statusText; }
+            set { statusText = value;
+            NotifyPropertyChanged("StatusText");
+            }
 
+        }
         public DelegateCommand CalculateCommand { get; private set; }
+        public DelegateCommand YieldToggleCommand { get; private set; }
+        public DelegateCommand PVToggleCommand { get; private set; }
 
         #endregion
 
@@ -61,17 +74,62 @@ namespace BondCalculator
 
         private void PriceBond()
         {
-            if(calculateYield)
-            {
+
+            decimal result;
                 try
+                {                   
+                    if (!yieldGiven)
+                    {
+                        using (Task<decimal> task = new Task<decimal>(() => calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue)))
+                        {
+
+                            StatusText = "Started Calculation...";
+                            calculationRunning = true;
+
+                            task.Start();
+                            task.Wait();// wait for the task to finish, without blocking the main thread
+
+                            if (!task.IsFaulted)
+                            {
+                                calculatorModel.Yield = task.Result;//the task has finished its background work, and we can take the result
+                                StatusText = "Yield =";//Signal the completion of the task
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (Task<decimal> task = new Task<decimal>(() => calculationEngine.CalculatePresentValue(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.Yield)))
+                        {
+
+                            StatusText = "Started Calculation...";
+                            calculationRunning = true;
+
+                            task.Start();
+                            task.Wait();// wait for the task to finish, without blocking the main thread
+
+                            if (!task.IsFaulted)
+                            {
+                                calculatorModel.PresentValue = task.Result;//the task has finished its background work, and we can take the result
+                                StatusText = "Present Value = ";//Signal the completion of the task
+                            }
+                        }
+                    }
+                }
+                catch(AggregateException ae)
                 {
-                    calculationEngine.CalculateYield(calculatorModel.CouponRate, calculatorModel.YearsToMaturity, calculatorModel.Frequency, calculatorModel.FaceValue, calculatorModel.PresentValue);
+                    //log excepion
+                    StatusText = "Error in calculation.";
                 }
                 catch(Exception e)
                 {
-
+                    //log excepion
+                    StatusText = "Error in calculation.";
                 }
-            }
+                finally
+                {
+                    calculationRunning = false;
+                }
+            
         }
 
         private void NotifyPropertyChanged(string propertyName)

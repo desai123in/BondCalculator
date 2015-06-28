@@ -11,11 +11,11 @@ namespace BondCalculator
     {
         #region Private Fields
 
-        private decimal couponRate = 10m;
+        private decimal couponRate = 0.10m;
         private int yearsToMaturity = 5;
         private int frequency = 1;
         private decimal faceValue = 1000m;
-        private decimal yield = 15m;
+        private decimal yield = 0.15m;
         private decimal presentValue = 550m;
 
         #endregion
@@ -28,8 +28,8 @@ namespace BondCalculator
             {
                 if (!couponRate.Equals(value))
                 {
-                    if (value.Equals(101))
-                        base.AddError("CouponRate", ">100 rate not allowed");
+                    if (value.CompareTo(1.0m) > 0)
+                        base.AddError("CouponRate", "Greater then 100% rate not allowed");
                     else
                         base.RemoveError("CouponRate");
                     couponRate = value;
