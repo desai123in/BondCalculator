@@ -31,8 +31,26 @@ namespace BondCalculator
 
 
             CalculateCommand = new DelegateCommand(param => PriceBond(), (param) => ((ReadyForCalculation) && (!calculationRunning)));
-            YieldToggleCommand = new DelegateCommand(param => { yieldGiven = (bool)param; StatusText = ""; }, (param) => true);
-            PVToggleCommand = new DelegateCommand(param => { yieldGiven = !(bool)param; StatusText = ""; }, (param) => true);
+            
+            YieldToggleCommand = new DelegateCommand(param => { 
+                yieldGiven = (bool)param;
+                StatusText = "";
+                if (yieldGiven)
+                {
+                    calculatorModel.Yield = 0.0m;
+                    calculatorModel.PresentValue = 0.0m;
+                }
+            }, (param) => true);
+
+            PVToggleCommand = new DelegateCommand(param => { 
+                yieldGiven = !(bool)param;
+                StatusText = "";
+                if (!yieldGiven)
+                {
+                    calculatorModel.PresentValue = 0.0m;
+                    calculatorModel.Yield = 0.0m;
+                }
+            }, (param) => true);
 
         }
         #endregion
@@ -75,7 +93,7 @@ namespace BondCalculator
         {
             try
             {
-                StatusText = "Started Calculation...";
+                StatusText = "Calculation In Progress......";
                 calculationRunning = true;
                 NotifyPropertyChanged("ReadyForCalculation");
                 if (!yieldGiven)

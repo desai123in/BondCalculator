@@ -89,7 +89,7 @@ namespace BondCalculationEngine
             //twik with num iterations for solving
             return Solve(
                 x => PRICE(yearsToMaturity, rate, x, faceValue, frequency) - pr,
-                y => FirstDerivativeOfPRICE(yearsToMaturity, rate, y, faceValue, frequency), 800);
+                y => FirstDerivativeOfPRICE(yearsToMaturity, rate, y, faceValue, frequency), 1200);
         }
 
         #endregion
