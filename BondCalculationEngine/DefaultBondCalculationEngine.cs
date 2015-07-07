@@ -72,10 +72,15 @@ namespace BondCalculationEngine
         private decimal PowerDecimal(decimal num, decimal power)
         {
             decimal res = 1.0m;
+            bool isNegative = power < 0;
+            power = Math.Abs(power);
+
             for (int i = 1; i <= power; i++)
             {
-                res = res * num;
+                res = checked(res * num);
             }
+            if (isNegative)
+                res = checked(1 / res);
             return res;
         }
 
@@ -84,7 +89,12 @@ namespace BondCalculationEngine
             decimal x = startingValue;
             for (int i = 0; i < iterations; i++)
             {
-                x -= function(x) / derivativeFunction(x);
+                decimal funX = function(x);
+                decimal DerfunX = derivativeFunction(x);
+
+                x = x - checked(funX / DerfunX);
+
+                //x -= function(x) / derivativeFunction(x);
             }
             return x;
         }

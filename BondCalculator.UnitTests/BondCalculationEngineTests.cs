@@ -36,6 +36,7 @@ namespace BondCalculator.UnitTests
             #endregion //Input
 
             decimal expected = 0.1000000000m;
+
             decimal actual = target.CalculateYield(couponRate, yearsToMaturity, frequency, faceValue, presentValue);
             actual = CommonUtils.Truncate(actual, yieldPrecision);
 
